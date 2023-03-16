@@ -7,10 +7,10 @@ using namespace std;
 
 
 struct lineStruct{
-    int x1;
-    int y1;
-    int x2;
-    int y2;
+    double x1;
+    double y1;
+    double x2;
+    double y2;
 
 } ;
 
@@ -49,7 +49,7 @@ tuple <double, double> findIntersections(lineStruct lineOne, lineStruct lineTwo,
         return {safe_number, safe_number};
     }
     //cout << oneSlope << endl;
-    double y = oneSlope * ((x - lineOne.x1) + lineOne.y1) ;
+    double y = (oneSlope * (x - lineOne.x1)) + lineOne.y1 ;
     return {x, y};
 }
 int countIntersections(lineStruct linesList[], int numLines, double safe_number){
@@ -77,22 +77,20 @@ int countIntersections(lineStruct linesList[], int numLines, double safe_number)
 
 }
 int main() {
-    int dimensions = 10; // Dimensions of the square
-    int numLines = 2; // Number of lines
+    int dimensions = 1; // Dimensions of the square
+    int numLines = 100; // Number of lines
     lineStruct linesList[numLines];
     srand(1);
     list<lineStruct> usedLines;
-    /* for(int i = 0; i < numLines; i++){
+    for(int i = 0; i < numLines; i++){
 
-        linesList[i].x1 = rand() % dimensions;
-        linesList[i].y1 = rand() % dimensions;
-        linesList[i].x2 = rand() % dimensions;
-        linesList[i].y2 = rand() % dimensions;
-        while(linesList[i].x1 == linesList[i].x2){
-            linesList[i].x2 = rand() % dimensions;
-        }
-    } */
-    linesList[0].x1 = 2;
+        linesList[i].x1 = rand()/ static_cast<float>(RAND_MAX);
+        linesList[i].y1 = rand()/ static_cast<float>(RAND_MAX);
+        linesList[i].x2 = rand()/ static_cast<float>(RAND_MAX);
+        linesList[i].y2 = rand()/ static_cast<float>(RAND_MAX);
+      
+    } 
+   /*  linesList[0].x1 = 2;
     linesList[0].x2 = 5;
     linesList[0].y1 = 2;
     linesList[0].y2 = 6;
@@ -100,9 +98,10 @@ int main() {
     linesList[1].x1 = 1;
     linesList[1].x2 = 5;
     linesList[1].y1 = 8;
-    linesList[1].y2 = 1;
+    linesList[1].y2 = 1; */
 
 
-    countIntersections(linesList, numLines, dimensions + 1);
+    int numIntersect = countIntersections(linesList, numLines, dimensions + 1);
+    cout << numIntersect << " intersections were found" << endl;
     return 0;
 }

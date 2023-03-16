@@ -3,14 +3,15 @@
 #include <random>
 #include <list>
 #include <tuple>
+#include <queue>
 using namespace std;
 
 
 struct lineStruct{
-    int x1;
-    int y1;
-    int x2;
-    int y2;
+    double x1;
+    double y1;
+    double x2;
+    double y2;
 
 } ;
 
@@ -56,17 +57,10 @@ int countIntersections(lineStruct linesList[], int numLines, double safe_number)
     int numIntersections = 0;
     list<tuple<double, double>> intersections;
     double a, b;
-    for(int i = 0; i < numLines - 1; i++){
-        for(int j = i + 1; j < numLines; j++){
-            tie(a, b) = findIntersections(linesList[i], linesList[j], safe_number);
-            //cout << a << " " << b << endl;
-            if(a != safe_number){
-                intersections.push_back({a, b});
-                numIntersections++;
-            }
-            
-        }
-    }
+    
+    
+
+
     cout << "Intersections found: " << endl;
     for(auto x : intersections){
         tuple <double,double> tp = x;
@@ -76,23 +70,24 @@ int countIntersections(lineStruct linesList[], int numLines, double safe_number)
     return numIntersections;
 
 }
+bool operator<(lineStruct lineOne, lineStruct lineTwo){
+    return lineOne.x1 > lineTwo.x1;
+}
 int main() {
     int dimensions = 10; // Dimensions of the square
-    int numLines = 2; // Number of lines
+    int numLines = 100; // Number of lines
     lineStruct linesList[numLines];
     srand(1);
     list<lineStruct> usedLines;
-    /* for(int i = 0; i < numLines; i++){
+    for(int i = 0; i < numLines; i++){
 
-        linesList[i].x1 = rand() % dimensions;
-        linesList[i].y1 = rand() % dimensions;
-        linesList[i].x2 = rand() % dimensions;
-        linesList[i].y2 = rand() % dimensions;
-        while(linesList[i].x1 == linesList[i].x2){
-            linesList[i].x2 = rand() % dimensions;
-        }
-    } */
-    linesList[0].x1 = 2;
+        linesList[i].x1 = rand()/ static_cast<float>(RAND_MAX);
+        linesList[i].y1 = rand()/ static_cast<float>(RAND_MAX);
+        linesList[i].x2 = rand()/ static_cast<float>(RAND_MAX);
+        linesList[i].y2 = rand()/ static_cast<float>(RAND_MAX);
+      
+    } 
+/*     linesList[0].x1 = 2;
     linesList[0].x2 = 5;
     linesList[0].y1 = 2;
     linesList[0].y2 = 6;
@@ -100,17 +95,21 @@ int main() {
     linesList[1].x1 = 1;
     linesList[1].x2 = 5;
     linesList[1].y1 = 8;
-    linesList[1].y2 = 1;
-
+    linesList[1].y2 = 1; */
+    priority_queue<lineStruct> boQueue;
     // Swap points one and two if one comes before the other
     for(int i = 0; i < numLines; i++){
         if(linesList[i].x1 < linesList[i].x2){
             swap(linesList[i].x1, linesList[i].x2);
             swap(linesList[i].y1, linesList[i].y2);
         }
+        boQueue.push(linesList[i]);
     }
-    // Sort the values by x1 so we can
+    // Sort the values by x1 
+    cout << boQueue.top().x1 << endl;
 
-    countIntersections(linesList, numLines, dimensions + 1);
+
+    int numIntersect = countIntersections(linesList, numLines, dimensions + 1);
+    cout << numIntersect << " intersections were found" << endl;
     return 0;
 }
